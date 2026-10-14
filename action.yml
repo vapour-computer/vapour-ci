@@ -1,0 +1,37 @@
+name: Vapour build and publish
+description: Build with an installed Vapour CLI and publish a web game
+inputs:
+  token:
+    description: Vapour publish token
+    required: true
+  dir:
+    description: Project containing vapour.toml
+    default: .
+  build:
+    description: Run vapour build first (requires engine-build CLI)
+    default: 'true'
+  experimental-chunks:
+    description: Opt in to experimental chunk publish against a compatible API
+    default: 'false'
+  dry-run:
+    description: Validate and pack without uploading (build still runs)
+    default: 'false'
+  version:
+    description: Override publish version
+    default: ''
+  api:
+    description: Override API URL
+    default: ''
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        VAPOUR_TOKEN: ${{ inputs.token }}
+        VAPOUR_PROJECT_DIR: ${{ inputs.dir }}
+        VAPOUR_BUILD: ${{ inputs.build }}
+        VAPOUR_CHUNKS: ${{ inputs.experimental-chunks }}
+        VAPOUR_DRY_RUN: ${{ inputs.dry-run }}
+        VAPOUR_VERSION: ${{ inputs.version }}
+        VAPOUR_API: ${{ inputs.api }}
+      run: bash "$GITHUB_ACTION_PATH/scripts/publish.sh"
