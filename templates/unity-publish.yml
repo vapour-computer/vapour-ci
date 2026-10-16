@@ -5,10 +5,12 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with: { lfs: true }
-      - uses: game-ci/unity-builder@v4
+      - uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00 # v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -21,7 +23,7 @@ jobs:
       - name: Resolve publish version
         id: version
         run: echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
-      - uses: vapour-computer/vapour-ci@v1
+      - uses: vapour-computer/vapour-ci@06971738215ae4fc523af53dbd60d942fbad270a # main
         with:
           token: ${{ secrets.VAPOUR_TOKEN }}
           version: ${{ steps.version.outputs.value }}
