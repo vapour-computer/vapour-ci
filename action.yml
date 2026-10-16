@@ -17,7 +17,13 @@ inputs:
     description: Validate and pack without uploading (build still runs)
     default: 'false'
   version:
-    description: Override publish version
+    description: Publish version (semver, for example 0.3.1)
+    required: true
+  notes:
+    description: Release notes text (required unless notes-file is set)
+    required: false
+  notes-file:
+    description: Optional path to a release notes file (alternative to notes text)
     default: ''
   api:
     description: Override API URL
@@ -33,5 +39,7 @@ runs:
         VAPOUR_CHUNKS: ${{ inputs.experimental-chunks }}
         VAPOUR_DRY_RUN: ${{ inputs.dry-run }}
         VAPOUR_VERSION: ${{ inputs.version }}
+        VAPOUR_NOTES: ${{ inputs.notes }}
+        VAPOUR_NOTES_FILE: ${{ inputs.notes-file }}
         VAPOUR_API: ${{ inputs.api }}
       run: bash "$GITHUB_ACTION_PATH/scripts/publish.sh"

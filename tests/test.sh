@@ -11,15 +11,19 @@ exit 0
 EOF
 chmod +x "$tmp/vapour"
 export PATH="$tmp:$PATH" TEST_LOG="$tmp/log" VAPOUR_TOKEN='fixture-secret'
-export VAPOUR_CHUNKS=true VAPOUR_DRY_RUN=true VAPOUR_VERSION='v1' VAPOUR_BUILD=true
+export VAPOUR_CHUNKS=true VAPOUR_DRY_RUN=true VAPOUR_VERSION='v1' VAPOUR_BUILD=true VAPOUR_NOTES='Tag release notes'
 for engine in godot unity bevy; do
   export VAPOUR_PROJECT_DIR="$engine project"
   : > "$TEST_LOG"
   bash "$root/scripts/publish.sh"
   test "$(head -1 "$TEST_LOG")" = "build --dir $engine project"
-  test "$(tail -1 "$TEST_LOG")" = "publish --dir $engine project --experimental-chunks --dry-run --version v1"
+  test "$(tail -1 "$TEST_LOG")" = "publish --dir $engine project --experimental-chunks --dry-run --version v1 --notes Tag release notes"
   ! grep -q fixture-secret "$TEST_LOG"
 done
+: > "$TEST_LOG"
+export VAPOUR_NOTES='' VAPOUR_NOTES_FILE='CHANGELOG.md'
+bash "$root/scripts/publish.sh"
+test "$(tail -1 "$TEST_LOG")" = "publish --dir bevy project --experimental-chunks --dry-run --version v1 --notes-file CHANGELOG.md"
 : > "$TEST_LOG"
 export FAIL_BUILD=true
 if bash "$root/scripts/publish.sh"; then echo 'ignored build failure' >&2; exit 1; fi
