@@ -10,8 +10,8 @@ Godot, Unity and Bevy use the same local command and vapour.toml configuration.
 Unity editor/WebGL support and CI licensing remain developer-managed; Bevy needs
 the WASM target and matching wasm-bindgen; Godot needs matching Web templates.
 
-Inputs: token (required, environment only), version (required), notes (required),
-optional notes-file (alternative to notes), dir, build (true), experimental-chunks
+Inputs: token (required, environment only), version (required), notes (required
+unless notes-file is set), optional notes-file (alternative to notes), dir, build (true), experimental-chunks
 (false), dry-run (false), and api. Dry run still builds locally. Use build=false
 for a pre-exported project. Chunk publishing is opt-in and requires a compatible
 experimental server; the deployed API does not support it yet.
